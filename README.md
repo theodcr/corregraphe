@@ -26,7 +26,6 @@ Drawing gives this Bokeh figure:
 
 ## Developer's guide
 
-- code contains type hints
 - checked with `mypy` and `flake8`
 - formatted with `black` and `isort`
 - basic functionality is tested with `doctest` by running `python corregraphe/core.py`
