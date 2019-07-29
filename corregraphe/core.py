@@ -1,5 +1,7 @@
+import hvplot.networkx as hvnx
 import networkx as nx
-import pandas as pd
+from pandas import DataFrame
+from typing import Dict, Tuple
 
 
 def CorrelationGraph(object):
@@ -11,28 +13,33 @@ def CorrelationGraph(object):
     data : DataFrame
         data to use to compute correlations
 
-    method : str = 'spearman' {'pearson', 'kendall', 'spearman'}
+    method : str = 'kendall' {'pearson', 'kendall', 'spearman'}
         correlation method, see pandas.DataFrame.corr
     """
 
-    def __init__(self, data: pd.DataFrame, method: str = "spearman"):
+    def __init__(self, data: DataFrame, method: str = "kendall"):
         self._data = data
         self._method = method
         self.correlations = self._compute_correlations(self._data, self._method)
         self.graph, self.pos = self._create_graph(self.correlations)
 
-    def draw(self):
-        pass
-
-    def _check_inputs(self):
-        pass
+    def draw(self, **kwargs):
+        return hvnx.draw(
+            self.graph,
+            pos=self.pos,
+            edge_width="weight",
+            node_color="weight",
+            labels="name",
+            colorbar=True,
+            **kwargs
+        )
 
     @staticmethod
-    def _compute_correlations(data: pd.DataFrame, method: str):
+    def _compute_correlations(data: DataFrame, method: str) -> DataFrame:
         return data.corr(method=method).abs()
 
     @staticmethod
-    def _create_graph(correlations: pd.DataFrame):
+    def _create_graph(correlations: DataFrame) -> Tuple[nx.Graph, Dict]:
         graph = nx.complete_graph(correlations.shape[1])
         graph = nx.relabel_nodes(
             graph, {i: col for i, col in enumerate(correlations.columns)}
