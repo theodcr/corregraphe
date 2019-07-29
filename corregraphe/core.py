@@ -2,8 +2,8 @@ from typing import Dict
 
 import hvplot.networkx as hvnx
 import networkx as nx
-from pandas import DataFrame
 from holoviews import Overlay
+from pandas import DataFrame
 
 
 class CorrelationGraph(object):
@@ -28,6 +28,7 @@ class CorrelationGraph(object):
     pos : Dict
         positions of nodes, keys are node names, value are (x, y) positions
     """
+
     def __init__(self, data: DataFrame, method: str = "kendall") -> None:
         self._data = data
         self._method = method
@@ -43,7 +44,7 @@ class CorrelationGraph(object):
         Returns
         -------
         Overlay
-            holoviews Overlay representing the correlation graph
+            HoloViews Overlay representing the correlation graph
         """
         return hvnx.draw(
             self.graph,
