@@ -59,8 +59,8 @@ class CorrelationGraph(object):
         return hvnx.draw(
             self.graph,
             pos=self.pos,
-            edge_width="correlation",
-            node_color="weight",
+            edge_width="weight",
+            node_color="cluster_corr",
             labels="name",
             colorbar=True,
             **kwargs
@@ -103,13 +103,13 @@ class CorrelationGraph(object):
         )
 
         for edge in graph.edges:
-            graph.edges[edge]["correlation"] = correlations[edge[0]][edge[1]]
+            graph.edges[edge]["weight"] = correlations[edge[0]][edge[1]]
 
         for node in graph.nodes:
             graph.nodes[node]["name"] = node
 
-        for node, coef in nx.clustering(graph, weight="correlation").items():
-            graph.nodes[node]["weight"] = coef
+        for node, coef in nx.clustering(graph, weight="weight").items():
+            graph.nodes[node]["cluster_corr"] = coef
 
         return graph
 
