@@ -117,6 +117,8 @@ class CorrelationGraph(object):
     def _compute_positions(graph: nx.Graph) -> Dict:
         """Returns positions of nodes using a spring layout.
 
+        Random seed is set and not changeable to make graphs always reproductible.
+
         Parameters
         ----------
         graph : Graph
@@ -127,7 +129,7 @@ class CorrelationGraph(object):
         Dict
             positions of nodes, keys are node names, value are (x, y) positions
         """
-        return nx.spring_layout(graph)
+        return nx.spring_layout(graph, seed=42)
 
 
 if __name__ == "__main__":
