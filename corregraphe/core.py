@@ -3,9 +3,10 @@ from typing import Dict
 import hvplot.networkx as hvnx
 import networkx as nx
 from pandas import DataFrame
+from holoviews import Overlay
 
 
-def CorrelationGraph(object):
+class CorrelationGraph(object):
     """
     Creates a correlation graph from dataframe.
 
@@ -16,16 +17,34 @@ def CorrelationGraph(object):
 
     method : str = 'kendall' {'pearson', 'kendall', 'spearman'}
         correlation method, see pandas.DataFrame.corr
-    """
 
-    def __init__(self, data: DataFrame, method: str = "kendall"):
+    Attributes
+    ----------
+    correlations : DataFrame
+        dataframe of correlations, columns and indexes are columns of `data`
+    graph : Graph
+        NetworkX graph object representing the correlations,
+        each node is a column of `data`, edges are correlations
+    pos : Dict
+        positions of nodes, keys are node names, value are (x, y) positions
+    """
+    def __init__(self, data: DataFrame, method: str = "kendall") -> None:
         self._data = data
         self._method = method
         self.correlations = self._compute_correlations(self._data, self._method)
         self.graph = self._create_graph(self.correlations)
         self.pos = self._compute_positions(self.graph)
 
-    def draw(self, **kwargs):
+    def draw(self, **kwargs) -> Overlay:
+        """Draws the graph and returns the hvplot object.
+
+        Keyword arguments are given to the hvplot.networkx.draw method.
+
+        Returns
+        -------
+        Overlay
+            holoviews Overlay representing the correlation graph
+        """
         return hvnx.draw(
             self.graph,
             pos=self.pos,
@@ -38,12 +57,35 @@ def CorrelationGraph(object):
 
     @staticmethod
     def _compute_correlations(data: DataFrame, method: str) -> DataFrame:
-        """Computes correlation between columns of dataframe."""
+        """Computes correlation between columns of dataframe.
+
+        Parameters
+        ----------
+        data : DataFrame
+        method : str
+            correlation method
+
+        Returns
+        -------
+        DataFrame
+            dataframe of correlations, columns and indexes are columns of `data`
+        """
         return data.corr(method=method).abs()
 
     @staticmethod
     def _create_graph(correlations: DataFrame) -> nx.Graph:
-        """Creates a graph object to represent correlations."""
+        """Creates a graph object to represent correlations.
+
+        Parameters
+        ----------
+        correlations : DataFrame
+            square dataframe of correlations, columns and indexes must be identical
+
+        Returns
+        -------
+        Graph
+            NetworkX graph object representing the correlations
+        """
         graph = nx.complete_graph(correlations.shape[1])
         graph = nx.relabel_nodes(
             graph, {i: col for i, col in enumerate(correlations.columns)}
@@ -62,6 +104,18 @@ def CorrelationGraph(object):
 
     @staticmethod
     def _compute_positions(graph: nx.Graph) -> Dict:
+        """Returns positions of nodes using a spring layout.
+
+        Parameters
+        ----------
+        graph : Graph
+            correlation graph, each node is a column, each link is a correlation
+
+        Returns
+        -------
+        Dict
+            positions of nodes, keys are node names, value are (x, y) positions
+        """
         return nx.spring_layout(graph)
 
     def __repr__(self) -> str:
