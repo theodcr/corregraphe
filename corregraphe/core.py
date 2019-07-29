@@ -27,6 +27,16 @@ class CorrelationGraph(object):
         each node is a column of `data`, edges are correlations
     pos : Dict
         positions of nodes, keys are node names, value are (x, y) positions
+
+    Usage
+    -----
+    >>> df = DataFrame({'a': [1, 2, 3, 4], 'b': [2, 4, 6, 8]})
+    >>> cg = CorrelationGraph(df)
+    >>> cg.correlations
+         a    b
+    a  1.0  1.0
+    b  1.0  1.0
+    >>> fig = cg.draw()
     """
 
     def __init__(self, data: DataFrame, method: str = "kendall") -> None:
@@ -119,5 +129,8 @@ class CorrelationGraph(object):
         """
         return nx.spring_layout(graph)
 
-    def __repr__(self) -> str:
-        return self.__class__.__name__
+
+if __name__ == "__main__":
+    import doctest
+
+    doctest.testmod()
