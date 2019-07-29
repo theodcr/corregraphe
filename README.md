@@ -20,7 +20,9 @@ cg = CorrelationGraph(df)
 cg.draw()
 ```
 
-![correlation graph example](example.png)
+Drawing gives this Bokeh figure:
+
+<img src="example.png" width="400">
 
 ## Developer's guide
 
