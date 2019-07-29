@@ -6,7 +6,9 @@ This package leverages NetworkX, Scipy and HoloViews to easily draw correlation 
 
 ## Installation
 
-Coming soon
+```
+pip install corregraphe
+```
 
 ## Usage
 
