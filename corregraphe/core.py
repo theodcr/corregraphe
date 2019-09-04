@@ -46,10 +46,13 @@ class CorrelationGraph(object):
         self.graph = self._create_graph(self.correlations)
         self.pos = self._compute_positions(self.graph)
 
-    def draw(self, **kwargs) -> Overlay:
+    def draw(self, **kwargs: Dict) -> Overlay:
         """Draws the graph and returns the hvplot object.
 
-        Keyword arguments are given to the hvplot.networkx.draw method.
+        Parameters
+        ----------
+        **kwargs : Dict[str, Any]
+            keyword arguments given to the hvplot.networkx.draw method
 
         Returns
         -------
