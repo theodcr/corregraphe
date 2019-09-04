@@ -4,6 +4,8 @@ Correlation graphs are a great way to visualize and understand the relationship 
 
 This package leverages NetworkX, Scipy and HoloViews to easily draw correlation graphs on any Pandas DataFrame.
 
+Works on numerical columns only for now.
+
 ## Installation
 
 ```
