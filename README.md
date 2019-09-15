@@ -8,6 +8,8 @@ Works on numerical columns only for now.
 
 ## Installation
 
+This project uses Python >= 3.6.
+
 ```
 pip install corregraphe
 ```
